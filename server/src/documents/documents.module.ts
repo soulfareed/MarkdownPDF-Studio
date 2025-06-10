@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { DocumentService } from './documents.service';
-import { DocumentsController } from './documents.controller';
+import { DocumentsService } from './documents.service';
+import { DocumentsController } from './document.controller';
 import {
   MarkdownDocument,
   MarkdownDocumentSchema,
@@ -13,8 +13,8 @@ import {
       { name: MarkdownDocument.name, schema: MarkdownDocumentSchema },
     ]),
   ],
-  providers: [DocumentService],
+  providers: [DocumentsService],
   controllers: [DocumentsController],
-  exports: [DocumentService],
+  exports: [DocumentsService],
 })
 export class DocumentsModule {}
