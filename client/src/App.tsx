@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useAuth } from "./context/AuthContext";
+// Removed unused useState import
+import { useAuth } from "../src/context/AuthContext";
 import {
   BrowserRouter as Router,
   Routes,
@@ -12,6 +12,7 @@ import Dashboard from "./pages/Dashboard";
 import DocumentEditor from "./pages/DocumentEditor";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
+import "./index.css";
 
 function App() {
   const { user, loading } = useAuth();

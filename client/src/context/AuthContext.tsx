@@ -1,9 +1,9 @@
-import React, {
+import {
   createContext,
   useContext,
   useState,
   useEffect,
-  ReactNode,
+  type ReactNode,
 } from "react";
 import {
   login as apiLogin,
@@ -13,7 +13,7 @@ import {
 import { jwtDecode } from "jwt-decode";
 
 interface AuthContextType {
-  user: any;
+  user: string | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name?: string) => Promise<void>;
