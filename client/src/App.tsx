@@ -23,6 +23,7 @@ function App() {
 
   return (
     // This is the main App component that sets up the router and routes for the application
+
     <Router>
       <div className="min-h-screen bg-gray-100">
         <Navbar />
