@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import {
   login as apiLogin,
-  register as apiregister,
+  register as apiRegister,
   logout as apiLogout,
 } from "../api/api";
 import { jwtDecode } from "jwt-decode";
@@ -20,7 +20,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>(null);
+const AuthContext = createContext<AuthContextType>(null!);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const register = async (email: string, password: string, name?: string) => {
-    const response = await apiResister(email, password, name);
+    const response = await apiRegister(email, password, name);
     if (response.data.access_token) {
       const decoded: any = jwtDecode(response.data.access_token);
       setUser(decoded);
