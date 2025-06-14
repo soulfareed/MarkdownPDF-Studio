@@ -23,7 +23,6 @@ function App() {
 
   return (
     // This is the main App component that sets up the router and routes for the application
-
     <Router>
       <div className="min-h-screen bg-gray-100">
         <Navbar />
@@ -40,9 +39,10 @@ function App() {
             <Route
               path="/"
               element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
+                user ? <Navigate to="/" /> : <Dashboard />
+                // <ProtectedRoute>
+                //   <Dashboard />
+                // </ProtectedRoute>
               }
             />
             <Route

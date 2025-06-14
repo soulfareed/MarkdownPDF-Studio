@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api";
-
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: "http://localhost:3000/api",
   headers: {
     "Content-Type": "application/json",
   },
+
+  withCredentials: true,
 });
 
 // Interceptor to add the Authorization header with the token if it exists
