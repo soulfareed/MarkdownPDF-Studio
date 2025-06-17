@@ -8,9 +8,18 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:5000",
+        target: "http://localhost:3000",
         changeOrigin: true,
         secure: false,
+        // rewrite: (path) => path.replace(/^\/api/, ""),
+        configure: (proxy) => {
+          proxy.on("error", (err) => {
+            console.log("Proxy error:", err);
+          });
+          proxy.on("proxyReq", (proxyReq) => {
+            console.log("Proxy request to:", proxyReq.method, proxyReq.path);
+          });
+        },
       },
     },
   },
