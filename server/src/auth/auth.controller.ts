@@ -5,7 +5,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
   // This endpoint is used to Register a user
   @Post('register')
@@ -14,10 +14,10 @@ export class AuthController {
   }
 
   // This endpoint is used to log in a user
-  @UseGuards(LocalAuthGuard)
+  // @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
-    return this.authService.login(req.user);
+  async login(@Body() user) {
+    return this.authService.login(user);
   }
 
   // This endpoint is used to log out a user

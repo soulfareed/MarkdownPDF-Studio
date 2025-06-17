@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -7,8 +7,8 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
+    private usersService: UsersService,
+    private jwtService: JwtService,
   ) {}
 
   // This method validates a user's credentials by checking the email and password
@@ -19,11 +19,12 @@ export class AuthService {
       const { password, ...result } = user.toObject();
       return result;
     }
-    return null;
+    throw new BadRequestException('Invalid credentials');
   }
 
   // This method is used to log in a user and generate a JWT token
   async login(user: any) {
+    await this.validateUser(user.email, user.password); // Ensure the user is validated before generating a token
     const payload = { email: user.email, sub: user._id };
     return {
       access_token: this.jwtService.sign(payload),
@@ -37,4 +38,3 @@ export class AuthService {
     return result;
   }
 }
-// This method is used to log out a user by invalidating the JWT token
