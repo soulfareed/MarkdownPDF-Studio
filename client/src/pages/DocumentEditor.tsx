@@ -120,7 +120,7 @@ const DocumentEditor = () => {
             <FiSave className="mr-2" /> {loading ? "Saving..." : "Save"}
           </button>
           <PDFDownloadLink
-            // document={<MarkDownPDF title={title} content={content} />}
+            document={<MarkDownPDF title={title} content={content} />}
             fileName={`${title || "document"}.pdf`}
             className="flex items-center px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
           >
