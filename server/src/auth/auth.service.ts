@@ -24,8 +24,12 @@ export class AuthService {
 
   // This method is used to log in a user and generate a JWT token
   async login(user: any) {
-    await this.validateUser(user.email, user.password); // Ensure the user is validated before generating a token
-    const payload = { email: user.email, sub: user._id };
+    const validatedUser = await this.validateUser(user.email, user.password); // Ensure the user is validated before generating a token
+    const payload = {
+      email: user.email,
+      sub: validatedUser._id,
+      userId: validatedUser._id,
+    };
     return {
       access_token: this.jwtService.sign(payload),
     };

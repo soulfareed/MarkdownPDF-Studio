@@ -20,6 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   // This method is called by Passport to validate the JWT token
   async validate(payload: any) {
+    console.log(payload);
     return this.usersService.findbyId(payload.sub);
   }
 }

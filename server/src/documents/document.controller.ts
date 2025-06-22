@@ -12,13 +12,16 @@ import { DocumentsService } from './documents.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
-@Controller('api/documents')
+@Controller('documents')
+@ApiBearerAuth('access-token')
 @UseGuards(JwtAuthGuard)
 export class DocumentsController {
   constructor(private documentsService: DocumentsService) {}
 
   @Post()
+  @ApiBearerAuth('access-token')
   create(@Body() createDocumentDto: CreateDocumentDto, @Req() req) {
     return this.documentsService.create({
       ...createDocumentDto,
