@@ -2,25 +2,24 @@ import {
   Controller,
   Get,
   Post,
-  Body,
-  Param,
   Put,
-  Delete,
+  Param,
+  Body,
+  Req,
   UseGuards,
-  Request,
 } from '@nestjs/common';
 import { DocumentsService } from './documents.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@Controller('documents')
+@Controller('api/documents')
 @UseGuards(JwtAuthGuard)
 export class DocumentsController {
-  constructor(private readonly documentsService: DocumentsService) {}
+  constructor(private documentsService: DocumentsService) {}
 
   @Post()
-  create(@Body() createDocumentDto: CreateDocumentDto, @Request() req) {
+  create(@Body() createDocumentDto: CreateDocumentDto, @Req() req) {
     return this.documentsService.create({
       ...createDocumentDto,
       userId: req.user._id,
@@ -28,26 +27,26 @@ export class DocumentsController {
   }
 
   @Get()
-  findAll(@Request() req) {
+  findAll(@Req() req) {
     return this.documentsService.findAll(req.user._id);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @Request() req) {
+  findOne(@Param('id') id: string, @Req() req) {
     return this.documentsService.findOne(id, req.user._id);
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateDocumentDto: UpdateDocumentDto,
-    @Request() req,
+    @Req() req,
   ) {
     return this.documentsService.update(id, updateDocumentDto, req.user._id);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string, @Request() req) {
-    return this.documentsService.remove(id, req.user._id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string, @Req() req) {
+  //   return this.documentsService.remove(id, req.user._id);
+  // }
 }

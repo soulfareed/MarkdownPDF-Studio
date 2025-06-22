@@ -13,11 +13,14 @@ export class DocumentsService {
   ) {}
 
   // This service provides methods to interact with the MarkdownDocument model
-  async create(
-    CreateDocumentDto: CreateDocumentDto,
-  ): Promise<MarkdownDocument> {
-    const createdDocument = new this.documentModel(CreateDocumentDto);
-    return createdDocument.save();
+  async create(createDocumentDto: CreateDocumentDto) {
+    try {
+      const createdDocument = new this.documentModel(createDocumentDto);
+      return await createdDocument.save();
+    } catch (error) {
+      console.error('Database create error:', error);
+      throw error;
+    }
   }
 
   // This method retrieves all documents from the database
@@ -36,10 +39,20 @@ export class DocumentsService {
     id: string,
     updateDocumentDto: UpdateDocumentDto,
     userId: string,
-  ): Promise<MarkdownDocument> {
-    return this.documentModel
-      .findOneAndUpdate({ _id: id, userId }, updateDocumentDto, { new: true })
-      .exec();
+  ) {
+    try {
+      const updated = await this.documentModel
+        .findOneAndUpdate({ _id: id, userId }, updateDocumentDto, { new: true })
+        .exec();
+
+      if (!updated) {
+        throw new Error('Document not found or access denied');
+      }
+      return updated;
+    } catch (error) {
+      console.error('Database update error:', error);
+      throw error;
+    }
   }
   async remove(id: string, userId: string): Promise<MarkdownDocument> {
     return this.documentModel.findOneAndDelete({ _id: id, userId }).exec();
