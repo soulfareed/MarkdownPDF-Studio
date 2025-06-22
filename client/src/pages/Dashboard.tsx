@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiPlus, FiTrash2, FiEdit2 } from "react-icons/fi";
-import { getDocuments, deleteDocument } from "../api/api";
+import { getDocument, deleteDocument } from "../api/api";
 
 interface Document {
   _id: string;
@@ -17,18 +17,18 @@ const Dashboard = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchDocuments = async () => {
+    const fetchDocument = async () => {
       try {
-        const response = await getDocuments();
+        const response = await getDocument();
         setDocuments(response.data);
-      } catch (err) {
+      } catch (error) {
         setError("Failed to fetch documents.");
-        console.error(err);
+        console.error(error);
       } finally {
         setLoading(false);
       }
     };
-    fetchDocuments();
+    fetchDocument();
   }, []);
 
   const handleDelete = async (id: string) => {

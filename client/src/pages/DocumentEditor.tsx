@@ -9,7 +9,6 @@ import {
   Document,
   Page,
   Text,
-  //   View,
   StyleSheet,
 } from "@react-pdf/renderer";
 import { getDocument, createDocument, updateDocument } from "../api/api";
@@ -20,9 +19,9 @@ const styles = StyleSheet.create({
     fontFamily: "Helvetica",
   },
   title: {
-    fontFamily: "Helvetica-Bold",
     fontSize: 24,
     marginBottom: 20,
+    fontWeight: "bold",
   },
   content: {
     fontSize: 12,
@@ -30,24 +29,24 @@ const styles = StyleSheet.create({
   },
 });
 
-const MarkDownPDF = ({
+const MarkdownPDF = ({
   title,
   content,
 }: {
   title: string;
   content: string;
-}) => {
+}) => (
   <Document>
     <Page style={styles.page}>
       <Text style={styles.title}>{title || "Untitled Document"}</Text>
       <Text style={styles.content}>{content}</Text>
     </Page>
-  </Document>;
-};
+  </Document>
+);
 
 const DocumentEditor = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
+  const { id } = useParams();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [isNew, setIsNew] = useState(false);
@@ -55,7 +54,7 @@ const DocumentEditor = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchDocuments = async () => {
+    const fetchDocument = async () => {
       if (id === "new") {
         setIsNew(true);
         setLoading(false);
@@ -67,40 +66,56 @@ const DocumentEditor = () => {
         setTitle(response.data.title);
         setContent(response.data.content);
       } catch (err) {
-        setError("Failed to fetch document.");
+        setError("Failed to fetch document");
         console.error(err);
         navigate("/");
       } finally {
         setLoading(false);
       }
     };
-    fetchDocuments();
+
+    fetchDocument();
   }, [id, navigate]);
 
   const handleSave = async () => {
     try {
       setLoading(true);
+      let response;
+
       if (isNew) {
-        const response = await createDocument(title, content);
-        navigate(`/documents/${response.data._id}`);
+        response = await createDocument(title, content);
+        console.log("Create response:", response);
+        navigate(`/documents/${response._id}`);
       } else {
-        await updateDocument(id!, title, content);
+        response = await updateDocument(id, title, content);
+        console.log("Update response:", response);
       }
-    } catch (err) {
-      setError("Failed to save document.");
-      console.error(err);
+
+      return response;
+    } catch (error) {
+      console.error("Full error details:", {
+        error,
+        request: error.config,
+        response: error.response,
+      });
+      setError(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to save document"
+      );
     } finally {
       setLoading(false);
     }
   };
 
   if (loading) {
-    return <div className="text-center mt-10">Loading document...</div>;
+    return <div className="text-center py-8">Loading document...</div>;
   }
 
   if (error) {
     return <div className="p-4 bg-red-100 text-red-700 rounded">{error}</div>;
   }
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex justify-between items-center mb-4">
@@ -120,7 +135,7 @@ const DocumentEditor = () => {
             <FiSave className="mr-2" /> {loading ? "Saving..." : "Save"}
           </button>
           <PDFDownloadLink
-            document={<MarkDownPDF title={title} content={content} />}
+            document={<MarkdownPDF title={title} content={content} />}
             fileName={`${title || "document"}.pdf`}
             className="flex items-center px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
           >

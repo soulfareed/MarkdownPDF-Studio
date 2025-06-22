@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "api",
+  baseURL: "/",
   headers: {
     "Content-Type": "application/json",
   },
@@ -58,7 +58,13 @@ export const getDocument = async (id: string) => {
 };
 
 export const createDocument = async (title: string, content: string) => {
-  return api.post("/documents", { title, content });
+  try {
+    const response = await api.post("/documents", { title, content });
+    return response.data;
+  } catch (error: any) {
+    console.error("Create error:", error.response?.data || error.message);
+    throw error;
+  }
 };
 
 export const updateDocument = async (
@@ -66,7 +72,13 @@ export const updateDocument = async (
   title: string,
   content: string
 ) => {
-  return api.put(`/documents/${id}`, { title, content });
+  try {
+    const response = await api.put(`/documents/${id}`, { title, content });
+    return response.data;
+  } catch (error: any) {
+    console.error("Update error:", error.response?.data || error.message);
+    throw error;
+  }
 };
 
 export const deleteDocument = async (id: string) => {
