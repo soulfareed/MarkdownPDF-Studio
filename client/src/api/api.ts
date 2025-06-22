@@ -1,23 +1,44 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "/",
+  baseURL: "/api",
   headers: {
     "Content-Type": "application/json",
   },
-
   withCredentials: true,
   timeout: 10000, // Set a timeout of 10 seconds for requests
 });
 
-// Interceptor to add the Authorization header with the token if it exists
+// Request interceptor to add the Authorization header
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
+// Response interceptor to handle errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Handle timeout errors
     if (error.code === "ECONNABORTED") {
       error.message = "Request timeout. Please try again.";
     }
+
+    // // Handle unauthorized errors (401)
+    // if (error.response?.status === 401) {
+    //   localStorage.removeItem("token");
+    //   // Optionally redirect to login page
+    //   window.location.href = "/login";
+    // }
+
     return Promise.reject(error);
   }
 );
@@ -25,7 +46,7 @@ api.interceptors.response.use(
 // Function to register a user
 export const register = async (
   email: string,
-  password?: string,
+  password: string,
   name?: string
 ) => {
   return api.post("/auth/register", { email, password, name });
@@ -47,6 +68,8 @@ export const login = async (email: string, password: string) => {
 
 export const logout = async () => {
   localStorage.removeItem("token");
+  // Optionally invalidate token on server side
+  await api.post("/auth/logout");
 };
 
 export const getDocuments = async () => {

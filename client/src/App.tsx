@@ -41,20 +41,12 @@ function App() {
               element={
                 user ? <Navigate to="/" /> : <Dashboard />
                 // <ProtectedRoute>
-                //   <Dashboard />
+                //   <Dashboard /
                 // </ProtectedRoute>
               }
             />
             <Route
               path="/documents/:id"
-              element={
-                <ProtectedRoute>
-                  <DocumentEditor />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/documents/new"
               element={
                 <ProtectedRoute>
                   <DocumentEditor />

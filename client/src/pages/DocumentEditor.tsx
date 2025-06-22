@@ -92,7 +92,7 @@ const DocumentEditor = () => {
       }
 
       return response;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Full error details:", {
         error,
         request: error.config,
