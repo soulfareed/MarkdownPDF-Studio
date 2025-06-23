@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+import "github-markdown-css";
+
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { FiSave } from "react-icons/fi";
@@ -145,17 +149,19 @@ const DocumentEditor = () => {
       </div>
 
       <div className="flex flex-1 overflow-hidden">
-        <div className="w-1/2 h-full pr-4">
+        <div className="w-1/2 pr-10">
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Write your markdown here..."
-            className="w-full h-full p-4 border rounded-lg font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-full p-4 border rounded-lg font-mono text-sm resize-none focus:outline-none "
           />
         </div>
         <div className="w-1/2 h-full pl-4 overflow-y-auto">
           <div className="markdown-body p-4 border rounded-lg h-full">
             <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw]}
               components={{
                 code({ node, inline, className, children, ...props }) {
                   const match = /language-(\w+)/.exec(className || "");

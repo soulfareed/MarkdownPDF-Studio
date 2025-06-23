@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @import "tailwindcss";
+@import "github-markdown-css";
 
 /* Global styles */
 body {
@@ -15,9 +16,13 @@ body {
 
 /* Markdown content styling */
 .markdown-body {
-  max-width: 800px;
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 45px;
+  background-color: #f6f8fa;
+  color: black;
 }
 
 .markdown-body pre {
