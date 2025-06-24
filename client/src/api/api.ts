@@ -66,10 +66,30 @@ export const login = async (email: string, password: string) => {
   }
 };
 
-export const logout = async () => {
-  localStorage.removeItem("token");
-  // Optionally invalidate token on server side
-  await api.post("/auth/logout");
+export const logout = async (): Promise<void> => {
+  try {
+    // Call logout endpoint if it exists
+    await api.post("/auth/logout");
+  } catch (error: any) {
+    // If endpoint doesn't exist (404), we'll still proceed with client-side logout
+    if (error.response?.status !== 404) {
+      console.error("Logout error:", error);
+    }
+  } finally {
+    // Always perform these client-side cleanup steps:
+
+    // 1. Remove token from localStorage
+    localStorage.removeItem("token");
+
+    // 2. Remove authorization header from axios
+    delete api.defaults.headers.common["Authorization"];
+
+    // 3. Redirect to login page
+    window.location.href = "/login";
+
+    // Optional: Clear any other user-related data
+    localStorage.removeItem("user");
+  }
 };
 
 export const getDocuments = async () => {

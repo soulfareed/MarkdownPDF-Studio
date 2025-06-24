@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @import "tailwindcss";
-@import "github-markdown-css";
+/* @import "github-markdown-css"; */
 
 /* Global styles */
 body {
