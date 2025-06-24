@@ -4,7 +4,6 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import "github-markdown-css";
-
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { FiSave } from "react-icons/fi";
@@ -15,7 +14,7 @@ import {
   Text,
   StyleSheet,
 } from "@react-pdf/renderer";
-import { getDocument, createDocument, updateDocument } from "../api/api";
+import { getDocuments, createDocument, updateDocument } from "../api/api";
 
 const styles = StyleSheet.create({
   page: {
@@ -66,7 +65,7 @@ const DocumentEditor = () => {
       }
 
       try {
-        const response = await getDocument(id!);
+        const response = await getDocuments(id!);
         setTitle(response.data.title);
         setContent(response.data.content);
       } catch (err) {

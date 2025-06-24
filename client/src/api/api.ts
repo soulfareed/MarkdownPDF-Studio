@@ -92,11 +92,11 @@ export const logout = async (): Promise<void> => {
   }
 };
 
-export const getDocuments = async () => {
-  return api.get("/documents");
-};
+// export const getDocuments = async () => {
+//   return api.get("/documents");
+// };
 
-export const getDocument = async (id: string) => {
+export const getDocuments = async (id: string) => {
   return api.get(`/documents/${id}`);
 };
 

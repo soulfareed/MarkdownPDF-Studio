@@ -23,11 +23,15 @@ export class DocumentsController {
   @Post()
   @ApiBearerAuth('access-token')
   create(@Body() createDocumentDto: CreateDocumentDto, @Req() req) {
-    return this.documentsService.create({
+    const document = await this.documentsService.create({
       ...createDocumentDto,
-      userId: req.user._id,
-    });
-  }
+      req.user._id,
+  });
+  return {
+    ...document
+  createdAt: document.createdAt,
+  updatedAt: document.updatedAt,
+}}
 
   @Get()
   findAll(@Req() req) {

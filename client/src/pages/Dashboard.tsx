@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiPlus, FiTrash2, FiEdit2 } from "react-icons/fi";
-import { getDocument, deleteDocument } from "../api/api";
+import { getDocuments, deleteDocument } from "../api/api";
+// import { useAuth } from "../context/AuthContext";
 
 interface Document {
   _id: string;
@@ -15,20 +16,22 @@ const Dashboard = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  // const { user } = useAuth();
+
+  const fetchDocuments = async () => {
+    try {
+      const response = await getDocuments();
+      setDocuments(response.data);
+    } catch (err) {
+      setError("Failed to fetch documents");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchDocument = async () => {
-      try {
-        const response = await getDocument();
-        setDocuments(response.data);
-      } catch (error) {
-        setError("Failed to fetch documents.");
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchDocument();
+    fetchDocuments();
   }, []);
 
   const handleDelete = async (id: string) => {
@@ -42,7 +45,7 @@ const Dashboard = () => {
   };
 
   if (loading) {
-    return <div className="text-center mt-10">Loading document...</div>;
+    return <div className="text-center mt-10 size-5">Loading document...</div>;
   }
   if (error) {
     return <div className="p-4 bg-red-100 text-red-700 rounded">{error}</div>;

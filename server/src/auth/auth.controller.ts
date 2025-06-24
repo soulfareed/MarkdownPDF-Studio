@@ -26,7 +26,7 @@ export class AuthController {
   @Post('logout')
   async logout(@Req() req: any, @Res() res: any) {
     try {
-      await this.authService.blacklistToken(req.user.jti);
+      // await this.authService.blacklistToken(req.user.jti);
       return res.status(200).json({
         message: 'Logout successful',
         access_token: '',
