@@ -2,6 +2,9 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+// import { TokenBlacklist } from '../users/schemas/users.schema';
 // import { User } from 'src/users/schemas/users.schema';
 
 @Injectable()
@@ -41,4 +44,16 @@ export class AuthService {
     const { password, ...result } = newUser.toObject();
     return result;
   }
+
+  // async blacklistToken(jti: string): Promise<void> {
+  //   const decodedToken = this.jwtService.decode(jti);
+  //   if (
+  //     decodedToken &&
+  //     typeof decodedToken === 'object' &&
+  //     'exp' in decodedToken
+  //   ) {
+  //     const expiresAt = new Date(decodedToken.exp * 1000);
+  //     await this.tokenBlacklistModel.create({ token: jti, expiresAt });
+  //   }
+  // }
 }

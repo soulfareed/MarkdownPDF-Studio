@@ -1,8 +1,9 @@
-import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserRequest } from './dto/login-user-request';
+import { access } from 'node:fs';
 
 @Controller('auth')
 export class AuthController {
@@ -22,10 +23,19 @@ export class AuthController {
   }
 
   // This endpoint is used to log out a user
-  //   @UseGuards(LocalAuthGuard)
-  //   @Post('logout')
-  //   async logout(@Request() req) {
-  //     const token = req.headers.authorization?.replace('Bearer ', '');
-  //     return this.authService.logout(token, req.user._id);
-  //   }
+  @Post('logout')
+  async logout(@Req() req: any, @Res() res: any) {
+    try {
+      await this.authService.blacklistToken(req.user.jti);
+      return res.status(200).json({
+        message: 'Logout successful',
+        access_token: '',
+        expires_in: 0,
+      });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: 'Logout failed', error: error.message });
+    }
+  }
 }
